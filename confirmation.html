@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscription Confirmation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <section id="confirmation" class="confirmation-section ">
+    <div class="confirmation-container">
+      <h1>Thank You for Subscribing, <span id="userNameHeading"></span>!</h1>
+
+      <p>We're thrilled to have you on board! Here are your subscription details:</p>
+      <div class="confirmation-details">
+
+        <ul>
+          <li><strong>Name:</strong> <span id="userName"></span></li>
+          <li><strong>Phone:</strong> <span id="userPhone"></span></li>
+          <li><strong>Address:</strong> <span id="userAddress"></span></li>
+          <li><strong>Plan:</strong> <span id="userPlan"></span></li>
+        </ul>
+      </div>
+      <p>Your subscription is successfully activated! You will be receiving your treats soon. 🍉</p>
+      <a href="index.html" class="btn-primary">Back to Home</a>
+    </div>
+  </section>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+
+      if (userData) {
+        document.getElementById('userNameHeading').textContent = userData.name;
+        document.getElementById('userName').textContent = userData.name;
+        document.getElementById('userPhone').textContent = userData.phone;
+        document.getElementById('userAddress').textContent = userData.address;
+        document.getElementById('userPlan').textContent = userData.plan === 'weekly' ? 'Weekly – ₹699' :
+          (userData.plan === 'monthly' ? 'Monthly – ₹2499' : 'Trial Pack – ₹130');
+      } else {
+        document.querySelector('.confirmation-container').innerHTML = '<h1>Error</h1><p>We couldn\'t retrieve your subscription details. Please try again.</p>';
+      }
+    });
+
+
+  </script>
+</body>
+
+</html>

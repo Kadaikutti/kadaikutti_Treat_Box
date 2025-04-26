@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kadaikutti Treat Box</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="URL_TO_CORI_SANS_CSS">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="#">
+                <img src="images/final_logo-removebg-preview.png" alt="Kadaikuttis Treat Box Logo" />
+            </a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="index.html#plans"><i class="fas fa-box"></i> Plans</a></li>
+            <li><a href="index.html#gallery"><i class="fas fa-image"></i> Gallery</a></li>
+            <li><a href="index.html#testimonials"><i class="fas fa-comment"></i> Testimonials</a></li>
+            <li><a href="index.html#subscribe"><i class="fas fa-envelope"></i> Subscribe</a></li>
+            <li><a href="index.html#contact"><i class="fas fa-phone"></i> Contact</a></li>
+        </ul>
+        <div class="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+    <section id="subscribe" class="subscribe-section ">
+        <h2>Subscribe to Treat Box</h2>
+        <form class="subscribe-form">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required />
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required />
+            </div>
+
+            <div class="form-group">
+                <label for="address">Delivery Address</label>
+                <textarea id="address" name="address" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="plan">Choose Plan</label>
+                <select id="plan" name="plan" required>
+                    <option value="">-- Select --</option>
+                    <option value="weekly">Weekly – ₹699</option>
+                    <option value="monthly">Monthly – ₹2499</option>
+                    <option value="Sample"> Trial Pack– ₹130</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-primary">Submit</button>
+        </form>
+
+        <div class="qr-section" id="qrSection" style="display: none;">
+            <h3 id="qrMessage">Scan the QR to pay and enjoy your treat! 🍉 <br><br> After payment, please click the Done
+                button below to confirm.</h3>
+            <div class="qr-container">
+                <img id="qrImage" src="" alt="QR Code" class="qr-img" />
+            </div>
+            <button id="doneBtn" class="btn-done">Done ✅</button>
+        </div>
+
+    </section>
+
+    <script>
+        window.onload = function () {
+            // Add 'show' class to the form after the page loads
+            const form = document.querySelector('.subscribe-form');
+            form.classList.add('show');
+        };
+    </script>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.animate-on-scroll').forEach(elem => {
+            observer.observe(elem);
+        });
+    </script>
+
+    <script>
+        const form = document.querySelector('.subscribe-form');
+        const qrSection = document.getElementById('qrSection');
+        const qrImage = document.getElementById('qrImage');
+        const doneBtn = document.getElementById('doneBtn');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent actual form submit
+
+            // Collect user data
+            const userData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                plan: document.getElementById('plan').value
+            };
+
+            // Save user data to localStorage
+            localStorage.setItem('userData', JSON.stringify(userData));
+
+            const plan = document.getElementById('plan').value;
+
+            // Set the right QR based on selected plan
+            let qrPath = '';
+            switch (plan) {
+                case 'weekly':
+                    qrPath = 'images/qr-weekly-removebg-preview.png';
+                    break;
+                case 'monthly':
+                    qrPath = 'images/qr-monthly-removebg-preview.png';
+                    break;
+                case 'Sample':
+                    qrPath = 'images/qr-sample-removebg-preview.png';
+                    break;
+                default:
+                    alert("Please select a valid plan.");
+                    return;
+            }
+
+            qrImage.src = qrPath;
+            form.style.display = 'none';
+            qrSection.style.display = 'block';
+        });
+
+        doneBtn.addEventListener('click', function () {
+            // Create upload section
+            const uploadSection = document.createElement('div');
+            uploadSection.innerHTML = `
+        <h3>Upload Payment Screenshot 📸</h3>
+        <input type="file" id="paymentProof" accept="image/*" required />
+        <br><br>
+        <button id="confirmPaymentBtn" class="btn-primary">Confirm Payment</button>
+    `;
+            qrSection.innerHTML = ''; // Clear QR section
+            qrSection.appendChild(uploadSection);
+
+            const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+            confirmPaymentBtn.addEventListener('click', function () {
+                const fileInput = document.getElementById('paymentProof');
+                if (fileInput.files.length === 0) {
+                    alert('Please upload your payment screenshot!');
+                } else {
+                    // Save the file info if needed - for now, just move forward
+                    window.location.href = "confirmation.html"; // redirect after upload
+                }
+            });
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>
